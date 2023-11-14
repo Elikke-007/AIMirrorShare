@@ -121,6 +121,34 @@ export default (parent) => {
   //     startAnim()
   //   })
   resultImg.onload = () => {
-    startAnim()
+    console.log("onload")
+    // startAnim()
+    let width = resultImg.offsetWidth
+    let max = width - 3
+    let min = 0
+    divider.style.visibility = "visible"
+    divider.animate([{ left: max + "px" }, { left: min + "px" }], {
+      duration: 2000,
+      easing: "cubic-bezier(0.76, 0, 0.26, 1)",
+      iterations: Infinity,
+      direction: "alternate",
+    })
+
+    resultImg.animate(
+      [
+        {
+          clipPath: "inset(0px 0px 0px 0px)",
+        },
+        {
+          clipPath: `inset(0px ${max}px 0px 0px)`,
+        },
+      ],
+      {
+        duration: 2000,
+        easing: "cubic-bezier(0.76, 0, 0.26, 1)",
+        iterations: Infinity,
+        direction: "alternate",
+      }
+    )
   }
 }

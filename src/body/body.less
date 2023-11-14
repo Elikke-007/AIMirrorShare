@@ -13,6 +13,8 @@
       width: 100%;
       object-fit: cover;
       z-index: 1;
+      clip-path: inset(0px 0px 0px 0px);
+      transition-timing-function: cubic-bezier(0.76, 0, 0.26, 1);
     }
     .resultImg2 {
       position: absolute;
@@ -26,9 +28,9 @@
         background-color: white;
         height: 100%;
         position: absolute;
-        left: calc(100% - 3px);
         z-index: 10;
         visibility: hidden;
+        transition-timing-function: cubic-bezier(0.76, 0, 0.26, 1);
     }
 
     .topBarWrapper {
