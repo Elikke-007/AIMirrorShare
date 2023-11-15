@@ -1,64 +1,8 @@
 import "./body.less"
-import resultSrc from "../../assets/example.png"
-import resultImg2Src from "../../assets/example2.jpg"
+import resultImgSrc from "../../assets/example.png"
+import originImgSrc from "../../assets/example2.jpg"
 import magicSrc from "../../assets/magic.png"
 import shareImgSrc from "../../assets/share.png"
-
-function bezier(t, initial, p1, p2, final) {
-  return (
-    (1 - t) * (1 - t) * (1 - t) * initial +
-    3 * (1 - t) * (1 - t) * t * p1 +
-    3 * (1 - t) * t * t * p2 +
-    t * t * t * final
-  )
-}
-
-/**
- * 白色线动画
- * @param {number} width -图片宽度
- */
-function startAnim() {
-  const resultImg = document.getElementById("resultImg")
-  // 左边界
-  const min = 0
-  // 右边界
-  const max = resultImg.offsetWidth
-  const divider = document.getElementById("divider")
-  divider.style.visibility = "visible"
-  divider.style.left = max + "px"
-  let startTime
-  let duration = 2500
-  let progress = 0
-  let pos = max
-  let direction = -1
-  // 更新逻辑
-  const onUpdate = (curTime) => {
-    progress = (curTime - startTime) / duration
-    if (direction < 0) {
-      //   pos = max * (1 - progress)
-      pos = max * bezier(1 - progress, 0.76, 0, 0.26, 1)
-    } else {
-      //   pos = max * progress
-      pos = bezier(progress, 0.26, 0, 0.76, 1) * max
-    }
-    if (pos >= max) {
-      direction = -1
-      startTime = performance.now()
-    } else if (pos <= min) {
-      direction = 1
-      startTime = performance.now()
-    }
-    divider.style.left = pos + "px"
-    resultImg.style.clipPath = `inset(0px ${max - pos}px 0px 0px)`
-    window.requestAnimationFrame(onUpdate)
-  }
-  startTime = performance.now()
-  window.requestAnimationFrame(onUpdate)
-}
-function onload(event) {
-  console.log("图片加载完毕", event.target.offsetWidth)
-  startAnim(event.target.offsetWidth)
-}
 
 /**
  * body
@@ -67,17 +11,19 @@ function onload(event) {
 export default (parent) => {
   const container = document.createElement("div")
   container.id = "main"
+  const env = process.env.NODE_ENV ?? "development"
+  let isDev = env === "development"
 
-  // 效果图
   const resultWrapper = document.createElement("div")
   resultWrapper.className = "resultWrapper"
-  const resultImg2 = new Image()
-  resultImg2.src = resultImg2Src
-  resultImg2.className = "resultImg2"
-  resultWrapper.appendChild(resultImg2)
-
+  // 原图
+  const originImg = new Image()
+  originImg.src = isDev ? originImgSrc : `${VarValue.originImg}`
+  originImg.className = "originImg"
+  resultWrapper.appendChild(originImg)
+  // 效果图
   const resultImg = new Image()
-  resultImg.src = resultSrc
+  resultImg.src = isDev ? resultImgSrc : `${VarValue.generatedImg}`
   resultImg.id = "resultImg"
   resultImg.classList.add("resultImg")
   resultWrapper.appendChild(resultImg)
@@ -108,28 +54,41 @@ export default (parent) => {
   const shareImg = new Image()
   shareImg.src = shareImgSrc
   shareImg.className = "shareImg"
+  shareImg.onclick = () => {
+    try {
+      //   console.log("share")
+      let shareText = "Hello AiMirror!"
+      if (navigator.canShare && navigator.canShare({ text: shareText })) {
+        navigator.share({
+          text: shareText,
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   // try filter 按钮
-  const tryFilterBtn = document.createElement("div")
+  const tryFilterBtn = document.createElement("a")
   tryFilterBtn.className = "tryFilterBtn"
   tryFilterBtn.innerText = "Try Filter"
+  tryFilterBtn.href = `${VarValue.appUrl}`
   bottomBarWrapper.append(shareImg, tryFilterBtn)
   resultWrapper.appendChild(bottomBarWrapper)
 
   parent.appendChild(container)
-
-  //   document.addEventListener("DOMContentLoaded", () => {
-  //     startAnim()
-  //   })
-  resultImg.onload = () => {
-    console.log("onload")
-    // startAnim()
+  const onResize = () => {
     let width = resultImg.offsetWidth
-    let max = width - 3
-    let min = 0
+    let duration = 2500
+    let max = width - 3 - 30
+    let min = 30
+    // 缓动曲线
+    let cubicBezier1 = "cubic-bezier(.76,0,.26,1)"
+    // App 中的动画参数的逆向，暂时不知道怎么分两段运动
+    // let cubicBezier2 = "cubic-bezier(.9,0.01,.56,.4)"
     divider.style.visibility = "visible"
     divider.animate([{ left: max + "px" }, { left: min + "px" }], {
-      duration: 2000,
-      easing: "cubic-bezier(0.76, 0, 0.26, 1)",
+      duration: duration,
+      easing: cubicBezier1,
       iterations: Infinity,
       direction: "alternate",
     })
@@ -137,18 +96,23 @@ export default (parent) => {
     resultImg.animate(
       [
         {
-          clipPath: "inset(0px 0px 0px 0px)",
+          clipPath: `inset(0px ${min}px 0px 0px)`,
         },
         {
           clipPath: `inset(0px ${max}px 0px 0px)`,
         },
       ],
       {
-        duration: 2000,
-        easing: "cubic-bezier(0.76, 0, 0.26, 1)",
+        duration: duration,
+        easing: cubicBezier1,
         iterations: Infinity,
         direction: "alternate",
       }
     )
+  }
+  // 动画
+  resultImg.onload = () => {
+    onResize()
+    window.addEventListener("resize", onResize)
   }
 }

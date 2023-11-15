@@ -29,14 +29,7 @@ module.exports = {
   plugins: [
     // 用于输出 html 文件，自动引入 js 文件
     new HtmlWebpackPlugin({
-      title: "AIMirror",
-      meta: [
-        { property: "og:title", content: "AIMirror" },
-        {
-          property: "og:description",
-          content: "Look what an amazing edit I've created! Tap the link to use it",
-        },
-      ],
+      template: "./index.html",
     }),
   ],
   module: {

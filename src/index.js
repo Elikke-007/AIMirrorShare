@@ -13,10 +13,9 @@ class Main {
     document.body.appendChild(app)
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("app").style.height =
+    document.body.clientHeight + "px"
+})
 
 new Main()
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("body height", document.body.clientHeight)
-
-  document.getElementById("app").style.height = document.body.clientHeight + 'px'
-})
