@@ -18,12 +18,12 @@ export default (parent) => {
   resultWrapper.className = "resultWrapper"
   // 原图
   const originImg = new Image()
-  originImg.src = isDev ? originImgSrc : `${VarValue.originImg}`
+  originImg.src = isDev ? originImgSrc : VarValue.originImg
   originImg.className = "originImg"
   resultWrapper.appendChild(originImg)
   // 效果图
   const resultImg = new Image()
-  resultImg.src = isDev ? resultImgSrc : `${VarValue.generatedImg}`
+  resultImg.src = isDev ? resultImgSrc : VarValue.generatedImg
   resultImg.id = "resultImg"
   resultImg.classList.add("resultImg")
   resultWrapper.appendChild(resultImg)
