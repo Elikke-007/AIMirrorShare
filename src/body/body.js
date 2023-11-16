@@ -77,6 +77,9 @@ export default (parent) => {
 
   parent.appendChild(container)
   const onResize = () => {
+    // 小优化，如果屏幕宽度不变就不重置动画
+    if (document.body.clientWidth === clientWidth) return
+    clientWidth = document.body.clientWidth
     let width = resultImg.offsetWidth
     let duration = 2500
     let max = width - 3 - 30
@@ -110,6 +113,7 @@ export default (parent) => {
       }
     )
   }
+  let clientWidth = 0
   // 动画
   resultImg.onload = () => {
     onResize()

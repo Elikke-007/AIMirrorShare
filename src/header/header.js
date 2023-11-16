@@ -8,7 +8,6 @@ import logoSrc from "../../assets/logo.png"
 export default (parent) => {
   const container = document.createElement("div")
   container.id = "header"
-  // container.classList.add('#header')
 
   // logo
   const logoImg = new Image()
