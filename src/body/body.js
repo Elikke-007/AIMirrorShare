@@ -1,5 +1,5 @@
 import "./body.less"
-import resultImgSrc from "../../assets/example.png"
+import resultImgSrc from "../../assets/example.jpeg"
 import originImgSrc from "../../assets/example2.jpg"
 import magicSrc from "../../assets/magic.png"
 import shareImgSrc from "../../assets/share.png"
@@ -16,6 +16,10 @@ export default (parent) => {
 
   const resultWrapper = document.createElement("div")
   resultWrapper.className = "resultWrapper"
+
+  const loader = document.createElement("span")
+  loader.className = "loader"
+  resultWrapper.appendChild(loader)
   // 原图
   const originImg = new Image()
   originImg.src = isDev ? originImgSrc : VarValue.originImg
@@ -75,11 +79,36 @@ export default (parent) => {
   bottomBarWrapper.append(shareImg, tryFilterBtn)
   resultWrapper.appendChild(bottomBarWrapper)
 
+  let clientWidth = 0
   parent.appendChild(container)
   const onResize = () => {
     // 小优化，如果屏幕宽度不变就不重置动画
     if (document.body.clientWidth === clientWidth) return
     clientWidth = document.body.clientWidth
+    setDivider()
+    setAllAnim()
+  }
+  window.addEventListener("resize", onResize)
+  // 动画
+  resultImg.onload = () => {
+    loader.style.visibility = "hidden"
+    onResize()
+  }
+  const setDivider = () => {
+    divider.style.visibility = "visible"
+    let ratio = resultImg.naturalWidth / resultImg.naturalHeight
+    let containerWidth = resultImg.parentElement.offsetWidth
+    let containerHeight = resultImg.parentElement.offsetHeight
+    let actualHeight
+    if (containerWidth / containerHeight > ratio) {
+      actualHeight = containerHeight
+    } else {
+      actualHeight = containerWidth / ratio
+    }
+    divider.style.height = actualHeight + "px"
+    divider.style.top = `calc(50% - ${actualHeight / 2}px)`
+  }
+  const setAllAnim = () => {
     let width = resultImg.offsetWidth
     let duration = 2500
     let max = width - 3 - 30
@@ -88,14 +117,14 @@ export default (parent) => {
     let cubicBezier1 = "cubic-bezier(.76,0,.26,1)"
     // App 中的动画参数的逆向，暂时不知道怎么分两段运动
     // let cubicBezier2 = "cubic-bezier(.9,0.01,.56,.4)"
-    divider.style.visibility = "visible"
     divider.animate([{ left: max + "px" }, { left: min + "px" }], {
       duration: duration,
       easing: cubicBezier1,
       iterations: Infinity,
       direction: "alternate",
     })
-
+    resultImg.style.visibility = "visible"
+    originImg.style.visibility = "visible"
     resultImg.animate(
       [
         {
@@ -112,11 +141,5 @@ export default (parent) => {
         direction: "alternate",
       }
     )
-  }
-  let clientWidth = 0
-  // 动画
-  resultImg.onload = () => {
-    onResize()
-    window.addEventListener("resize", onResize)
   }
 }
