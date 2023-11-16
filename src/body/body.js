@@ -61,7 +61,7 @@ export default (parent) => {
   shareImg.onclick = () => {
     try {
       //   console.log("share")
-      let shareText = "Hello AiMirror!"
+      let shareText = `Hey check this out! Turned my pic into an anime version. Pretty awesome, right?🌟📸 ${window.location.href}`
       if (navigator.canShare && navigator.canShare({ text: shareText })) {
         navigator.share({
           text: shareText,
