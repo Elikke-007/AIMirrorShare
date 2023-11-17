@@ -1,6 +1,6 @@
 import "./body.less"
-import resultImgSrc from "../../assets/example.jpeg"
-import originImgSrc from "../../assets/example2.jpg"
+import resultImgSrc from "../../assets/result.png"
+import originImgSrc from "../../assets/result.png"
 import magicSrc from "../../assets/magic.png"
 import shareImgSrc from "../../assets/share.png"
 
@@ -77,7 +77,7 @@ export default (parent) => {
   tryFilterBtn.innerText = "Try Filter"
   tryFilterBtn.href = `${VarValue.appUrl}`
   bottomBarWrapper.append(shareImg, tryFilterBtn)
-  resultWrapper.appendChild(bottomBarWrapper)
+  container.appendChild(bottomBarWrapper)
 
   let clientWidth = 0
   parent.appendChild(container)
@@ -106,7 +106,8 @@ export default (parent) => {
       actualHeight = containerWidth / ratio
     }
     divider.style.height = actualHeight + "px"
-    divider.style.top = `calc(50% - ${actualHeight / 2}px)`
+
+    divider.style.top = `${originImg.style.top}px`
   }
   const setAllAnim = () => {
     let width = resultImg.offsetWidth
