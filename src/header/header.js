@@ -30,7 +30,7 @@ export default (parent) => {
   // open 按钮
   const openBtn = document.createElement("a")
   openBtn.className = "openBtn"
-  openBtn.innerText = "Open"
+  openBtn.innerText = "OPEN"
   openBtn.href = VarValue.appUrl
   container.appendChild(openBtn)
   openBtn.onclick = () => {}
