@@ -13,9 +13,32 @@ class Main {
     document.body.appendChild(app)
   }
 }
+/**
+ * 获取实际显示区域的宽高
+ * @returns {{pageWidth:number,pageHeight:number}} 返回手机浏览器实际显示区域的宽高，也就是去掉了底部操作栏和顶部地址栏的高度
+ */
+function getBrowserInterfaceSize() {
+  var pageWidth = window.innerWidth
+  var pageHeight = window.innerHeight
+
+  if (typeof pageWidth != "number") {
+    //在标准模式下面
+    if (document.compatMode == "CSS1Compat") {
+      pageWidth = document.documentElement.clientWidth
+      pageHeight = document.documentElement.clientHeight
+    } else {
+      pageWidth = document.body.clientWidth
+      pageHeight = document.body.clientHeight
+    }
+  }
+  return {
+    pageWidth: pageWidth,
+    pageHeight: pageHeight,
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("app").style.height =
-    document.body.clientHeight + "px"
+  let height = getBrowserInterfaceSize().pageHeight
+  document.getElementById("app").style.height = height + "px"
 })
 
 new Main()
