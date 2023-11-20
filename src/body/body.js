@@ -46,7 +46,7 @@ export default (parent) => {
   magicImg.classList.add("magicIcon")
   // 模型名
   const topBarTitle = document.createElement("span")
-  topBarTitle.innerText = "Anime 2D"
+  topBarTitle.innerText = isDev ? "Anime 2D" : VarValue.modelName
   topBarTitle.className = "topBarTitle"
   topBarWrapper.append(magicImg, topBarTitle)
   resultWrapper.appendChild(topBarWrapper)
