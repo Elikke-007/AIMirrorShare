@@ -12,9 +12,9 @@
     <title>AiMirror</title>
     <script>
       const VarValue = {
-        appUrl: "{{ appUrl }}",
-        originImg: "{{ originImg }}",
-        generatedImg: "{{ generatedImg }}",
+        appUrl: "{{ appUrl | safe }}",
+        originImg: "{{ originImg | safe }}",
+        generatedImg: "{{ generatedImg | safe }}",
       }
     </script>
   </head>
