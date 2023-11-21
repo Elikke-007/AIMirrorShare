@@ -11,10 +11,6 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-  // 用于开发过程中提供 server，监测文件变化
-  devServer: {
-    static: "./dist",
-  },
   optimization: {
     // 有多个入口是需要配置此选项，否则会报错
     // runtimeChunk: 'single',

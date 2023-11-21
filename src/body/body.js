@@ -78,9 +78,38 @@ export default (parent) => {
   tryFilterBtn.href = `${VarValue.appUrl}`
   bottomBarWrapper.append(shareImg, tryFilterBtn)
   container.appendChild(bottomBarWrapper)
+  parent.appendChild(container)
+
+  // 全屏预览
+  const preview = document.createElement("div")
+  preview.id = "preview"
+  const previewImg = document.createElement("img")
+  previewImg.id = "previewImg"
+  previewImg.src = resultImg.src
+  preview.appendChild(previewImg)
+  parent.appendChild(preview)
+  let showPreview = false
+  resultWrapper.ondblclick = (ev) => {
+    console.log("双击")
+    showPreview = true
+    resultWrapper.style.pointerEvents = "none"
+    preview.style.opacity = 0.5
+    preview.style.pointerEvents = "auto"
+    previewImg.style.scale = 1
+  }
+  preview.onclick = (ev) => {
+    showPreview = false
+    preview.style.opacity = 0
+    preview.style.pointerEvents = "none"
+    previewImg.style.scale = 0
+  }
+  previewImg.addEventListener("transitionend", () => {
+    if (!showPreview) {
+      resultWrapper.style.pointerEvents = "auto"
+    }
+  })
 
   let clientWidth = 0
-  parent.appendChild(container)
   const onResize = () => {
     // 小优化，如果屏幕宽度不变就不重置动画
     if (document.body.clientWidth === clientWidth) return
