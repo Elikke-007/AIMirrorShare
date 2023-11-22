@@ -1,7 +1,6 @@
 import "./index.less"
 import appendHeader from "./header/header.js"
 import appendBody from "./body/body.js"
-import transformImg from "./body/transformImg.js"
 
 class Main {
   constructor() {
@@ -40,7 +39,6 @@ function getBrowserInterfaceSize() {
 document.addEventListener("DOMContentLoaded", () => {
   let height = getBrowserInterfaceSize().pageHeight
   document.getElementById("app").style.height = height + "px"
-  transformImg()
 })
 
 new Main()

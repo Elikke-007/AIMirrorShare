@@ -93,7 +93,7 @@ export default (parent) => {
     console.log("双击")
     showPreview = true
     resultWrapper.style.pointerEvents = "none"
-    preview.style.opacity = 0.5
+    preview.style.opacity = 1
     preview.style.pointerEvents = "auto"
     previewImg.style.scale = 1
   }
