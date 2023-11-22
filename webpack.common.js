@@ -6,11 +6,6 @@ module.exports = {
   entry: {
     index: "./src/index.js",
   },
-  output: {
-    filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "dist"),
-    clean: true,
-  },
   optimization: {
     // 有多个入口是需要配置此选项，否则会报错
     // runtimeChunk: 'single',
@@ -30,18 +25,25 @@ module.exports = {
   ],
   module: {
     rules: [
-      // 加载 less
       {
-        test: /\.less$/i,
+        test: /\.less$/i, // 加载 less
         use: ["style-loader", "css-loader", "less-loader"],
       },
-      // 加载图片
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: "asset/resource",
-        // generator: {
-        //   filename: "image/[hash][ext][query]",
-        // },
+        test: /\.(jpg|png|gif)$/, // 处理图片资源
+        loader: "url-loader", // 只有一个loader可以这样写
+        options: {
+          // 对loader进行配置
+          limit: 8 * 1024, // 图片小于8kb，就转成base64
+          esModules: false, // 因为url-loader默认用es6模块化语法去解析，而下面的html-loader引入的标签图片是commonjs规范，所以需要把url-loader关闭es6模块化语法，改用commonjs规范
+          name: "[hash:10].[ext]", // 默认打包后的图片是个很长的哈希值，可以通过name进行重命名，例子是取前十位，文件格式为原格式
+          outputPath: "imgs", // 意思是在输出的文件夹内新建个imgs文件夹，把打包后的图片资源放里面。
+        },
+      },
+      // 因为光靠url-loader，并不能对html便签src引入的文件进行解析，所以需要通过html-loader解析html文件，引入便签对应的img，才能被url-loader处理
+      {
+        test: /\.html$/,
+        loader: "html-loader",
       },
     ],
   },
