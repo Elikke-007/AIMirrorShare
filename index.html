@@ -9,7 +9,7 @@
       content="From real life to anime – check out this cool transformation! 🎨📸"
     />
     <meta property="og:image" content="{{ generatedImg }}" />
-    <title>AiMirror</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <script>
       const VarValue = {
         appUrl: "{{ appUrl | safe }}",
